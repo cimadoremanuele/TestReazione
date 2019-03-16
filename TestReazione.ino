@@ -1,5 +1,10 @@
 #include <LiquidCrystal_I2C.h>
 int ledStart = 13;
+int button1;
+int led1;
+int button2;
+int led2;
+int ledRGB;
 int btnStart = 7;
 int buttonstatus = 0;
 int tempoLed;
@@ -20,12 +25,8 @@ void loop() {
   if (buttonstatus == HIGH)
   {
     digitalWrite(ledStart, LOW);
-    tempoLed = random(1000,3000);
+    tempoLed = random(2000,5000);
     delay(tempoLed);
-    digitalWrite(ledStart, HIGH);
-  }
-  else
-  {
     digitalWrite(ledStart, HIGH);
   }
   lcd.setCursor(0, 0);
