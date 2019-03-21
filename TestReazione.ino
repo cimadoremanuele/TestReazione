@@ -1,5 +1,5 @@
 #include <LiquidCrystal_I2C.h>
-//int ledStart = 13;
+int ledStart;
 int button1;
 int led1;
 int button2;
@@ -10,6 +10,7 @@ int tempo1;
 int tempo2;
 int btnStart;
 int buttonstatus;
+int buttonstatus2;
 int tempoLed;
 int tempoBeep;
 
@@ -39,33 +40,28 @@ void loop() {
     digitalWrite(led1, HIGH);
   }
   buttonstatus = digitalRead(button1);
-  while(led1 == HIGH)
+  while (led1 == HIGH && buttonstatus == HIGH)
   {
-    if (buttonstatus == HIGH)
-    {
-      digitalWrite(led1, LOW);
-      tempoBeep = random(2000,5000);
-      delay(tempoBeep);
-      digitalWrite(beep, HIGH);
-    }
-    else
-    {
-      tempo1++;
-      delay(1);
-    }
+    tempo1++;
+    delay(1);
+  }
+  if (buttonstatus == HIGH)
+  {
+    digitalWrite(led1, LOW);
+    digitalWrite(beep, LOW);
+    tempoBeep = random(2000,5000);
+    delay(tempoBeep);
+    digitalWrite(beep, HIGH);
   }
   buttonstatus = digitalRead(button2);
-  while (beep == HIGH)
+  while (beep == HIGH && buttonstatus = HIGH)
   {
-    if (buttonstatus == HIGH)
-    {
-      digitalWrite(beep, LOW);
-    }
-    else
-    {
-      tempo2++;
-      delay(1);
-    }
+    tempo2++;
+    delay(1);
+  }
+  if (buttonstatus == HIGH)
+  {
+    digitalWrite(beep, LOW);
   }
   lcd.setCursor(0, 0);
   lcd.print("Ciao");
