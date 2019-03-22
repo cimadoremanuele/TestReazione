@@ -10,15 +10,19 @@ int tempo1;
 int tempo2;
 int btnStart;
 int buttonstatus;
-int buttonstatus2;
 int tempoLed;
 int tempoBeep;
-
+bool finito;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 void setup() {
   // put your setup code here, to run once:
   //assegno il numero dei pin alle variabili dichiarate sopra
+  btnStart = 7;
+  led1 = 8;
+  button1 = 9;
+  beep = 10;
+  button2 = 11;
   lcd.init();
   lcd.backlight();
   pinMode(btnStart, INPUT);
@@ -31,38 +35,39 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  buttonstatus = digitalRead(btnStart);
-  if (buttonstatus == HIGH)
+  if (digitalRead(btnStart) == HIGH)
   {
-    digitalWrite(led1, LOW);
-    tempoLed = random(2000,5000);
-    delay(tempoLed);
-    digitalWrite(led1, HIGH);
-  }
-  buttonstatus = digitalRead(button1);
-  while (led1 == HIGH && buttonstatus == HIGH)
+    lcd.clear();
+    tempo1 = 0;
+    tempo2 = 0;
+    ButtonClicked(tempoLed,led1);
+  while (digitalRead(button1) == LOW)
   {
     tempo1++;
     delay(1);
   }
-  if (buttonstatus == HIGH)
+  lcd.setCursor(0, 0);
+  lcd.print(String(tempo1) + "ms");
+  if (digitalRead(button1) == HIGH)
   {
-    digitalWrite(led1, LOW);
-    digitalWrite(beep, LOW);
-    tempoBeep = random(2000,5000);
-    delay(tempoBeep);
-    digitalWrite(beep, HIGH);
-  }
-  buttonstatus = digitalRead(button2);
-  while (beep == HIGH && buttonstatus = HIGH)
+    ButtonClicked(tempoBeep,beep);
+  while (digitalRead(button2) == LOW)
   {
     tempo2++;
     delay(1);
   }
-  if (buttonstatus == HIGH)
+  lcd.setCursor(0, 1);
+  lcd.print(String(tempo2) + "ms");
+  if (digitalRead(button2) == HIGH)
   {
     digitalWrite(beep, LOW);
   }
-  lcd.setCursor(0, 0);
-  lcd.print("Ciao");
+  }
+  }
+}
+void ButtonClicked(int tempo, int output)
+{
+    tempo = random(2000,5000);
+    delay(tempo);
+    digitalWrite(output, HIGH);
 }
