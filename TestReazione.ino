@@ -1,18 +1,15 @@
 #include <LiquidCrystal_I2C.h>
-int ledStart;
-int button1;
+int btnStart;
 int led1;
-int button2;
-int led2;
-int ledRGB;
+int button1;
 int beep;
+int button2;
+int ledR;
+int ledV;
 int tempo1;
 int tempo2;
-int btnStart;
-int buttonstatus;
 int tempoLed;
 int tempoBeep;
-bool finito;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 void setup() {
@@ -23,6 +20,8 @@ void setup() {
   button1 = 9;
   beep = 10;
   button2 = 11;
+  ledR = 5;
+  ledV = 6;
   lcd.init();
   lcd.backlight();
   pinMode(btnStart, INPUT);
@@ -30,7 +29,8 @@ void setup() {
   pinMode(led1,OUTPUT);
   pinMode(button2, INPUT);
   pinMode(beep, OUTPUT);
-  pinMode(ledRGB, OUTPUT);
+  pinMode(ledR, OUTPUT);
+  pinMode(ledV, OUTPUT);
 }
 
 void loop() {
@@ -40,14 +40,16 @@ void loop() {
     lcd.clear();
     tempo1 = 0;
     tempo2 = 0;
+    digitalWrite(ledV, LOW);
+    digitalWrite(ledR, LOW);
     ButtonClicked(tempoLed,led1);
   while (digitalRead(button1) == LOW)
   {
     tempo1++;
     delay(1);
   }
-  lcd.setCursor(0, 0);
-  lcd.print(String(tempo1) + "ms");
+  digitalWrite(led1, LOW);
+  Scrittura(tempo1, 0, 0);
   if (digitalRead(button1) == HIGH)
   {
     ButtonClicked(tempoBeep,beep);
@@ -56,12 +58,19 @@ void loop() {
     tempo2++;
     delay(1);
   }
-  lcd.setCursor(0, 1);
-  lcd.print(String(tempo2) + "ms");
+  Scrittura(tempo2,0,1);
   if (digitalRead(button2) == HIGH)
   {
     digitalWrite(beep, LOW);
   }
+  }
+  if(tempo1 > 500 || tempo2 > 500)
+  {
+    digitalWrite(ledR, HIGH);
+  }
+  else
+  {
+    digitalWrite(ledV, HIGH);
   }
   }
 }
@@ -70,4 +79,9 @@ void ButtonClicked(int tempo, int output)
     tempo = random(2000,5000);
     delay(tempo);
     digitalWrite(output, HIGH);
+}
+void Scrittura(int tempo, int a, int b)
+{
+  lcd.setCursor(a, b);
+  lcd.print(String(tempo) + "ms");
 }
